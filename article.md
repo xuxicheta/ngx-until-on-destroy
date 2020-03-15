@@ -150,18 +150,26 @@ ng new check
 ```sh
 ng g c child
 ```
-Со следующим содержимым.
-Шаблон:
+Содержимое компонентов
+**app.component.ts**
 ```html
-<p>child: {{id}}</p>
+@Component({
+  selector: 'app-root',
+  template: `
+    <button #b (click)="b.toggle = !b.toggle">toggle</button>
+    <app-child *ngIf="b.toggle"></app-child>
+  `,
+})
+export class AppComponent {}
 ```
-компонент:
+
+**child.component.ts**
 ```javascript
 @Component({
   selector: 'app-child',
-  templateUrl: './child.component.html',
+  template: `<p>child: {{id}}</p>`,
 })
-export class ChildComponent implements OnInit, OnDestroy {
+export class ChildComponent implements OnInit {
   id: string;
 
   ngOnInit() {
@@ -170,37 +178,38 @@ export class ChildComponent implements OnInit, OnDestroy {
     this.sub2();
   }
 
-  ngOnDestroy() {}
-
   @UntilOnDestroy()
-  sub1() {
+  sub1(): Subscription {
     console.log(this.id, 'sub1 subscribe');
     return NEVER.pipe(
       finalize(() => console.log(this.id, 'sub1 unsubscribe'))
     )
-      .subscribe()
+      .subscribe();
   }
 
-  sub2() {
+  sub2(): Subscription {
     console.log(this.id, 'sub2 subscribe');
     return NEVER.pipe(
       finalize(() => console.log(this.id, 'sub2 unsubscribe'))
     )
-      .subscribe()
+      .subscribe();
   }
 }
 ```
 
-В шаблоне AppComponent будет просто
-```html
-<button #button (click)="button.toggle = !button.toggle">toggle</button>
-<app-child *ngIf="button.toggle"></app-child>
-```
+При нажатии на toggle компонент app-child  инициализируется 
 
-При нажатии на toggle компонент app-child  инициализируется и дестроится. В консоли видно что подписка от декорированного sub1 корректно завершается, а от sub1 остается висеть.
+....и дестроится. 
+
+В консоли видно что подписка от декорированного sub1 корректно завершается, а от sub1 остается висеть.
+Все сработало как ожидалось.
 
 Ссылка на stackblitz
 https://stackblitz.com/edit/until-on-destroy-ve
+
+Для Angular 9 на GitHub https://github.com/xuxicheta/until-on-destroy-check
+
+
 
 
 
