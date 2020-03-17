@@ -19,7 +19,7 @@ export class ChildComponent implements OnInit, OnDestroy {
     this.mySubscription();
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() { } // not nessecary after Angular 9
 
   @UntilOnDestroy()
   mySubscription(): Subscription {
