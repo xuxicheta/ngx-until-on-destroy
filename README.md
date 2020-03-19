@@ -15,11 +15,11 @@ import { interval } from 'rxjs';
 export class ChildComponent implements OnInit, OnDestroy {
   id: string;
 
-  ngOnInit() {
+  ngOnInit() { // not necessary after Angular 9
     this.mySubscription();
   }
 
-  ngOnDestroy() { } // not nessecary after Angular 9
+  ngOnDestroy() { } // not necessary after Angular 9
 
   @UntilOnDestroy()
   mySubscription(): Subscription {
@@ -28,8 +28,9 @@ export class ChildComponent implements OnInit, OnDestroy {
   }
 }
 ```
+I can ally it only to methods of component or directive.
 
-When component will be destroyed, all subscriptions from decorated methods will be unsubscribed.
+When component/directive will be destroyed, all subscriptions from decorated methods will be unsubscribed.
 
-In ViewEngine you have to implement OnInit and OnDestroy.
+In ViewEngine you have to implement OnInit and OnDestroy.<br>
 In Ivy it works without them.
