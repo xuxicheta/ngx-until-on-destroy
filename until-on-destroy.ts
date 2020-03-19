@@ -8,7 +8,9 @@ interface ClassWithSubscription {
 
 type SubscriptionMethod = (...args: any[]) => Subscription;
 
-const cmpKey = 'ɵcmp';
+const keys = ['ɵcmp', 'ɵprov', 'ɵdir', 'ɵpipe'];
+const getIvyDef = (target: any) => target.constructor[keys.find(key => target.constructor[key])];
+
 
 function createMethodWrapper(target: ClassWithSubscription, originalMethod: SubscriptionMethod): SubscriptionMethod {
   return function (...args: any[]) {
@@ -19,17 +21,17 @@ function createMethodWrapper(target: ClassWithSubscription, originalMethod: Subs
 }
 
 function wrapOneHook(target: any, hookName: string, wrappingFn: (target: ClassWithSubscription) => void): void {
-  return target.constructor[cmpKey]
+  return getIvyDef(target)
     ? wrapOneHook__Ivy(target, hookName, wrappingFn)
     : wrapOneHook__ViewEngine(target, hookName, wrappingFn);
 }
 
 function wrapOneHook__Ivy(target: any, hookName: string, wrappingFn: (target: ClassWithSubscription) => void): void {
   const ivyHookName = hookName.slice(0, 1).toLowerCase() + hookName.slice(1);
-  const componentDef: any = target.constructor[cmpKey];
+  const ivyDef: any = getIvyDef(target);
 
-  const originalHook: () => void = componentDef[ivyHookName];
-  componentDef[ivyHookName] = function (): void {
+  const originalHook: () => void = ivyDef[ivyHookName];
+  ivyDef[ivyHookName] = function (): void {
     wrappingFn(target);
 
     if (originalHook) {
