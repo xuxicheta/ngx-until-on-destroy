@@ -1,6 +1,6 @@
 {
   "name": "ngx-until-on-destroy",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "",
   "scripts": {
     "build": "tsc",
