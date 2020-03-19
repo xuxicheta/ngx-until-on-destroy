@@ -28,7 +28,7 @@ export class ChildComponent implements OnInit, OnDestroy {
   }
 }
 ```
-I can ally it only to methods of component or directive.
+I can be applied to methods of component or directive only.
 
 When component/directive will be destroyed, all subscriptions from decorated methods will be unsubscribed.
 
