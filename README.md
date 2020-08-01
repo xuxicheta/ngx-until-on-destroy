@@ -1,6 +1,7 @@
 # UntilOnDestroy decorator
 
 Allow you unsubscribe subscriptions when component was destroying.
+Can be used with Angular 5-10
 
 
 ## How to use it
@@ -28,9 +29,8 @@ export class ChildComponent implements OnInit, OnDestroy {
   }
 }
 ```
-I can ally it only to methods of component or directive.
+You can aply it to methods of components or directives only. Not in services.
 
 When component/directive will be destroyed, all subscriptions from decorated methods will be unsubscribed.
 
-In ViewEngine you have to implement OnInit and OnDestroy.<br>
-In Ivy it works without them.
+From Angular 9 ang higher you have not to implement OnInit and OnDestroy.<br>
