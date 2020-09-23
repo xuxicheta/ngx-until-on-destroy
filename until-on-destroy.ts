@@ -27,7 +27,7 @@ function isDecorated(target: any): boolean {
 function createMethodWrapper(originalMethod: SubscriptionMethod): SubscriptionMethod {
   return function(this: ClassWithSubscription, ...args: any[]): (Subscription | Subscription[]) {
     const sub: Subscription | Subscription[] = originalMethod.apply(this, args);
-    if ((sub as Subscription).unsubscribe) {
+    if ((sub as Subscription)?.unsubscribe) {
       this[subSymbol].add(sub as Subscription);
     } else if (Array.isArray(sub)) {
       (sub as Subscription[]).forEach(s => this[subSymbol].add(s));
