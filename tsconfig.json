@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "target": "es6",
-    "module": "commonjs",
+    "target": "ES2015",
+    "module": "ES2020",
     "outDir": "dist",
+    "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
