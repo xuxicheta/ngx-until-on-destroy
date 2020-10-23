@@ -1,0 +1,24 @@
+{
+  "name": "ngx-until-on-destroy",
+  "version": "2.6.0",
+  "peerDependencies": {
+    "@angular/common": "^10.1.6",
+    "@angular/core": "^10.1.6",
+    "rxjs": "~6.6.0"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
+  "keywords": [
+    "angular",
+    "subscription management",
+    "rxjs"
+  ],
+  "author": "antshvets@gmail.com",
+  "private": false,
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuxicheta/ngx-until-on-destroy"
+  }
+}

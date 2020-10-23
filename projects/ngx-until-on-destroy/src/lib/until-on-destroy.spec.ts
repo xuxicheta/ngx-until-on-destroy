@@ -1,5 +1,6 @@
+/* tslint:disable:typedef no-string-literal */
 import { UntilOnDestroy } from './until-on-destroy';
-import { timer, Observable, of } from 'rxjs';
+import { timer, Observable, of, Subscription } from 'rxjs';
 import { mapTo, finalize } from 'rxjs/operators';
 
 interface OnInit {
@@ -16,28 +17,28 @@ class FakeComponent implements OnDestroy, OnInit {
   request = (value: any) => timer(300).pipe(mapTo(value));
 
   @UntilOnDestroy()
-  subscribeRequest(value: any, cb: any = () => { }) {
+  subscribeRequest(value: any, cb: any = () => { }): Subscription {
     return this.request(value).subscribe(cb);
   }
 
-  subscribeRequestWithOutDecorator(value: any, cb: any = () => { }) {
+  subscribeRequestWithOutDecorator(value: any, cb: any = () => { }): Subscription {
     return this.request(value).subscribe(cb);
   }
 
   @UntilOnDestroy()
-  subscribeCustomObservable(obs$: Observable<any>, cb: any = () => { }) {
+  subscribeCustomObservable(obs$: Observable<any>, cb: any = () => { }): Subscription {
     return obs$.subscribe(cb);
   }
 
-  ngOnDestroy() { }
-  ngOnInit() { }
+  ngOnDestroy(): void { }
+  ngOnInit(): void { }
 }
 
-function ivify<T extends (OnDestroy & OnInit) >(component: T) {
+function IviFy<T extends (OnDestroy & OnInit) >(component: T): T {
   component.constructor['ɵcmp'] = {
     onInit: component.ngOnInit,
     onDestroy: component.ngOnDestroy,
-  }
+  };
   return component;
 }
 
@@ -50,23 +51,23 @@ function setup() {
 
 
 describe('UntilOnDestroy.decorator', () => {
-  describe.skip('ViewEngine', () => {
+  describe('ViewEngine', () => {
     it('should not break ordinary work', async () => {
       // arrange
       const { component, value } = setup();
-      const cb = jest.fn();
+      const cb = jasmine.createSpy();
       // act
       component.subscribeRequest(value, cb);
       await delay(400);
       // assert
-      expect(cb.mock.calls.length).toEqual(1);
-      expect(cb.mock.calls[0][0]).toEqual(value);
+      expect(cb.calls.all().length).toEqual(1);
+      expect(cb.calls.all()[0].args[0]).toEqual(value);
     });
 
     it('should complete decorated subscriptions at ngOnDestroy', async () => {
       // arrange
       const { component, value } = setup();
-      const cb = jest.fn();
+      const cb = jasmine.createSpy();
       // act
       const sub = component.subscribeRequestWithOutDecorator(value, cb);
       await delay(100);
@@ -78,16 +79,16 @@ describe('UntilOnDestroy.decorator', () => {
     it('should not complete not decorated subscriptions at ngOnDestroy', async () => {
       // arrange
       const { component, value } = setup();
-      const cb = jest.fn();
-      const spycomplete = jest.fn();
+      const cb = jasmine.createSpy();
+      const spycomplete = jasmine.createSpy();
       const obs$ = timer(300).pipe(mapTo(value), finalize(spycomplete));
       // act
       const sub = component.subscribeCustomObservable(obs$, cb);
       await delay(100);
       component.ngOnDestroy();
       // assert
-      expect(cb.mock.calls.length).toEqual(0);
-      expect(spycomplete.mock.calls.length).toEqual(1);
+      expect(cb.calls.all().length).toEqual(0);
+      expect(spycomplete.calls.all().length).toEqual(1);
       expect(sub.closed).toBeTruthy();
     });
 
@@ -95,7 +96,7 @@ describe('UntilOnDestroy.decorator', () => {
       // arrange
       const resultFn = () => {
         class NoInitComponent implements OnDestroy {
-          ngOnDestroy() { }
+          ngOnDestroy(): void { }
 
           @UntilOnDestroy()
           obs() {
@@ -104,7 +105,7 @@ describe('UntilOnDestroy.decorator', () => {
         }
       };
       // assert
-      expect(resultFn).toThrowError(`You have to implements ngOnInit in component NoInitComponent`);
+      expect(resultFn).toThrowError(`You have to implements ngOnInit in component (or directive) NoInitComponent`);
     });
 
     it('should throw error if there are not ngOnDestroy', () => {
@@ -120,7 +121,7 @@ describe('UntilOnDestroy.decorator', () => {
         }
       };
       // assert
-      expect(resultFn).toThrowError(`You have to implements ngOnDestroy in component NoDestroyComponent`);
+      expect(resultFn).toThrowError(`You have to implements ngOnDestroy in component (or directive) NoDestroyComponent`);
     });
 
   });
@@ -129,21 +130,22 @@ describe('UntilOnDestroy.decorator', () => {
     it('should not break ordinary work', async () => {
       // arrange
       const { component, value } = setup();
-      const ivyComponent = ivify(component);
-      const cb = jest.fn();
+      const ivyComponent = IviFy(component);
+      const cb = jasmine.createSpy();
       // act
       ivyComponent.subscribeRequest(value, cb);
       await delay(400);
       // assert
-      expect(cb.mock.calls.length).toEqual(1);
-      expect(cb.mock.calls[0][0]).toEqual(value);
+      const callsResult = cb.calls.all();
+      expect(callsResult.length).toEqual(1);
+      expect(callsResult[0].args[0]).toEqual(value);
     });
 
     it('should complete decorated subscriptions at ngOnDestroy', async () => {
       // arrange
       const { component, value } = setup();
-      const ivyComponent = ivify(component);
-      const cb = jest.fn();
+      const ivyComponent = IviFy(component);
+      const cb = jasmine.createSpy();
       // act
       const sub = ivyComponent.subscribeRequestWithOutDecorator(value, cb);
       await delay(100);
@@ -155,17 +157,17 @@ describe('UntilOnDestroy.decorator', () => {
     it('should not complete not decorated subscriptions at ngOnDestroy', async () => {
       // arrange
       const { component, value } = setup();
-      const ivyComponent = ivify(component);
-      const cb = jest.fn();
-      const spycomplete = jest.fn();
+      const ivyComponent = IviFy(component);
+      const cb = jasmine.createSpy();
+      const spycomplete = jasmine.createSpy();
       const obs$ = timer(300).pipe(mapTo(value), finalize(spycomplete));
       // act
       const sub = ivyComponent.subscribeCustomObservable(obs$, cb);
       await delay(100);
       ivyComponent.ngOnDestroy();
       // assert
-      expect(cb.mock.calls.length).toEqual(0);
-      expect(spycomplete.mock.calls.length).toEqual(1);
+      expect(cb.calls.all().length).toEqual(0);
+      expect(spycomplete.calls.all().length).toEqual(1);
       expect(sub.closed).toBeTruthy();
     });
 
@@ -182,7 +184,7 @@ describe('UntilOnDestroy.decorator', () => {
         }
       };
       // assert
-      expect(resultFn).toThrowError(`You have to implements ngOnInit in component NoInitComponent`);
+      expect(resultFn).toThrowError(`You have to implements ngOnInit in component (or directive) NoInitComponent`);
     });
 
     it('should throw error if there are not ngOnDestroy', () => {
@@ -198,14 +200,8 @@ describe('UntilOnDestroy.decorator', () => {
         }
       };
       // assert
-      expect(resultFn).toThrowError(`You have to implements ngOnDestroy in component NoDestroyComponent`);
+      expect(resultFn).toThrowError(`You have to implements ngOnDestroy in component (or directive) NoDestroyComponent`);
     });
 
   });
-
-
-
-
-
-
 });

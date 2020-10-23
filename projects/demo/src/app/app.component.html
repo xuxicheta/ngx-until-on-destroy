@@ -1,0 +1,22 @@
+<section style="display: flex">
+  <app-messager style="width: 300px"></app-messager>
+  <div>
+    <div style="display: flex">
+      <button (click)="haveTest1 = !haveTest1">Test1</button>
+      <app-test1
+        *ngIf="haveTest1"
+        name="test1"
+      ></app-test1>
+    </div>
+    <div style="display: flex">
+      <button (click)="haveTest2 = !haveTest2">Test2</button>
+      <app-test1
+        *ngIf="haveTest2"
+        name="test2"
+      ></app-test1>
+    </div>
+
+
+  </div>
+</section>
+

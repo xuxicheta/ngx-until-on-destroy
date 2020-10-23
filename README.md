@@ -1,40 +1,27 @@
-# UntilOnDestroy decorator
+# NgxUntilOnDestroy
 
-Allow you unsubscribe subscriptions when component was destroying.
-Can be used with Angular 5-10
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.7.
 
+## Development server
 
-## How to use it
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-```javascript
-import { Component, OnInit } from '@angular/core';
-import { UntilOnDestroy } from 'ngx-until-on-destroy';
-import { interval } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+## Code scaffolding
 
-@Component({
-})
-export class ChildComponent implements OnInit, OnDestroy {
-  id: string;
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-  ngOnInit() { // not necessary after Angular 9
-    this.mySubscription();
-  }
+## Build
 
-  ngOnDestroy() { } // not necessary after Angular 9
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-  @UntilOnDestroy()
-  mySubscription(): Subscription {
-    return interval(1000).pipe(
-      finalize(() => console.log('I am off!')),
-    )
-      .subscribe((v) => console.log(v))
-  }
-}
-```
-You can aply it to methods of components or directives only. Not in services.
-Method should return Subscription or Subscriptions array.
+## Running unit tests
 
-When component/directive will be destroyed, all subscriptions from decorated methods will be unsubscribed.
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-From Angular 9 ang higher you have not to implement OnInit and OnDestroy.<br>
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

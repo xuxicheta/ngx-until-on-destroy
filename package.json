@@ -1,32 +1,50 @@
 {
   "name": "ngx-until-on-destroy",
-  "version": "2.5.2",
-  "description": "",
+  "version": "2.6.0",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "test": "jest"
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
+    "watch:lib": "ng build --watch ngx-until-on-destroy",
+    "test:lib": "ng test ngx-until-on-destroy",
+    "publish:lib": "ng build ngx-until-on-destroy && npm --prefix dist/ngx-until-on-destroy publish"
   },
-  "main": "dist/index.js",
-  "keywords": [
-    "angular",
-    "subscription management",
-    "rxjs"
-  ],
-  "author": "antshvets@gmail.com",
-  "private": false,
-  "license": "ISC",
+  "private": true,
   "dependencies": {
-    "rxjs": "^6.5.3"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/xuxicheta/ngx-until-on-destroy"
+    "@angular/animations": "~10.1.6",
+    "@angular/common": "~10.1.6",
+    "@angular/compiler": "~10.1.6",
+    "@angular/core": "~10.1.6",
+    "@angular/forms": "~10.1.6",
+    "@angular/platform-browser": "~10.1.6",
+    "@angular/platform-browser-dynamic": "~10.1.6",
+    "@angular/router": "~10.1.6",
+    "rxjs": "~6.6.0",
+    "tslib": "^2.0.0",
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.4",
-    "jest": "^25.1.0",
-    "ts-jest": "^25.2.1",
-    "typescript": "^3.9.7"
+    "@angular-devkit/build-angular": "~0.1001.7",
+    "@angular/cli": "~10.1.7",
+    "@angular/compiler-cli": "~10.1.6",
+    "@types/node": "^12.11.1",
+    "@types/jasmine": "~3.5.0",
+    "@types/jasminewd2": "~2.0.3",
+    "codelyzer": "^6.0.0",
+    "jasmine-core": "~3.6.0",
+    "jasmine-spec-reporter": "~5.0.0",
+    "karma": "~5.0.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage-istanbul-reporter": "~3.0.2",
+    "karma-jasmine": "~4.0.0",
+    "karma-jasmine-html-reporter": "^1.5.0",
+    "ng-packagr": "^10.1.0",
+    "protractor": "~7.0.0",
+    "ts-node": "~8.3.0",
+    "tslint": "~6.1.0",
+    "typescript": "~4.0.2"
   }
 }
